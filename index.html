@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Street Clash Mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin: 0;
+  background: #0b0b0b;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+canvas {
+  background: linear-gradient(#222,#000);
+  display: block;
+  margin: auto;
+}
+.controls {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+button {
+  padding: 15px;
+  font-size: 18px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+</style>
+</head>
+<body>
+
+<h2>🥊 Street Clash Mobile</h2>
+<canvas id="game" width="360" height="500"></canvas>
+
+<div class="controls">
+  <button onclick="move(-1)">⬅️</button>
+  <button onclick="attack()">👊</button>
+  <button onclick="move(1)">➡️</button>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let player = { x: 50, hp: 100 };
+let enemy = { x: 260, hp: 100 };
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "cyan";
+  ctx.fillRect(player.x, 380, 30, 60);
+
+  ctx.fillStyle = "orange";
+  ctx.fillRect(enemy.x, 380, 30, 60);
+
+  ctx.fillStyle = "red";
+  ctx.fillRect(20,20,player.hp*2,10);
+  ctx.fillRect(200,20,enemy.hp*2,10);
+
+  if (enemy.hp > 0) {
+    if (enemy.x > player.x) enemy.x -= 1;
+    if (Math.abs(enemy.x-player.x)<35) player.hp -= 0.2;
+  }
+
+  if (player.hp<=0 || enemy.hp<=0) {
+    ctx.fillStyle="white";
+    ctx.font="24px Arial";
+    ctx.fillText("Game Over",110,250);
+  } else {
+    requestAnimationFrame(draw);
+  }
+}
+
+function move(dir){
+  player.x += dir*15;
+}
+function attack(){
+  if(Math.abs(player.x-enemy.x)<40) enemy.hp -= 5;
+}
+
+draw();
+</script>
+</body>
+  </html>
